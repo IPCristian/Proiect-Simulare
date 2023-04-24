@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1682357158",
+        "python_version": "3.8.10 (tags/v3.8.10:3d8993a, May  3 2021, 11:48:03) [MSC v.1928 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\unibuc\\OneDrive - unibuc.ro\\Anul3\\Sem2\\PAS\\Proiect\\venv\\Scripts\\mlagents-learn .\\Assets\\config\\moveConfig.yaml --run-id=Parameters_Move",
+        "mlagents_version": "0.29.0",
+        "mlagents_envs_version": "0.29.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.0.0+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1682357221"
+    },
+    "total": 62.8005725,
+    "count": 1,
+    "self": 0.009509800000003565,
+    "children": {
+        "run_training.setup": {
+            "total": 0.18796300000000032,
+            "count": 1,
+            "self": 0.18796300000000032
+        },
+        "TrainerController.start_learning": {
+            "total": 62.603099699999994,
+            "count": 1,
+            "self": 0.00012090000000597456,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 62.60296319999999,
+                    "count": 1,
+                    "self": 62.60296319999999
+                },
+                "TrainerController._save_models": {
+                    "total": 1.559999999756201e-05,
+                    "count": 1,
+                    "self": 1.559999999756201e-05
+                }
+            }
+        }
+    }
+}

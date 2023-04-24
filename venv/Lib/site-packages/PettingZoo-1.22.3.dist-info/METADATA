@@ -1,0 +1,86 @@
+Metadata-Version: 2.1
+Name: PettingZoo
+Version: 1.22.3
+Summary: Gymnasium for multi-agent reinforcement learning
+Home-page: https://pettingzoo.farama.org/
+Author: Farama Foundation
+Author-email: contact@farama.org
+Keywords: Reinforcement Learning,game,RL,AI,gymnasium
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.7, <3.12
+Description-Content-Type: text/markdown
+Requires-Dist: numpy (>=1.18.0)
+Requires-Dist: gymnasium (>=0.26.0)
+Provides-Extra: all
+Requires-Dist: multi-agent-ale-py (==0.1.11) ; extra == 'all'
+Requires-Dist: pygame (==2.1.3.dev8) ; extra == 'all'
+Requires-Dist: chess (==1.7.0) ; extra == 'all'
+Requires-Dist: rlcard (==1.0.5) ; extra == 'all'
+Requires-Dist: hanabi-learning-environment (==0.0.4) ; extra == 'all'
+Requires-Dist: pymunk (==6.2.0) ; extra == 'all'
+Requires-Dist: box2d-py (==2.3.5) ; extra == 'all'
+Requires-Dist: scipy (>=1.4.1) ; extra == 'all'
+Requires-Dist: pillow (>=8.0.1) ; extra == 'all'
+Requires-Dist: pynput ; extra == 'all'
+Requires-Dist: pytest ; extra == 'all'
+Requires-Dist: codespell ; extra == 'all'
+Requires-Dist: flake8 ; extra == 'all'
+Requires-Dist: isort ; extra == 'all'
+Requires-Dist: AutoROM ; extra == 'all'
+Requires-Dist: bandit ; extra == 'all'
+Requires-Dist: pytest-cov ; extra == 'all'
+Requires-Dist: pre-commit ; extra == 'all'
+Provides-Extra: atari
+Requires-Dist: multi-agent-ale-py (==0.1.11) ; extra == 'atari'
+Requires-Dist: pygame (==2.1.3.dev8) ; extra == 'atari'
+Provides-Extra: butterfly
+Requires-Dist: pygame (==2.1.3.dev8) ; extra == 'butterfly'
+Requires-Dist: pymunk (==6.2.0) ; extra == 'butterfly'
+Provides-Extra: classic
+Requires-Dist: chess (==1.7.0) ; extra == 'classic'
+Requires-Dist: rlcard (==1.0.5) ; extra == 'classic'
+Requires-Dist: pygame (==2.1.3.dev8) ; extra == 'classic'
+Requires-Dist: hanabi-learning-environment (==0.0.4) ; extra == 'classic'
+Provides-Extra: mpe
+Requires-Dist: pygame (==2.1.3.dev8) ; extra == 'mpe'
+Provides-Extra: other
+Requires-Dist: pillow (>=8.0.1) ; extra == 'other'
+Provides-Extra: sisl
+Requires-Dist: pygame (==2.1.3.dev8) ; extra == 'sisl'
+Requires-Dist: box2d-py (==2.3.5) ; extra == 'sisl'
+Requires-Dist: scipy (>=1.4.1) ; extra == 'sisl'
+Provides-Extra: tests
+Requires-Dist: pynput ; extra == 'tests'
+Requires-Dist: pytest ; extra == 'tests'
+Requires-Dist: codespell ; extra == 'tests'
+Requires-Dist: flake8 ; extra == 'tests'
+Requires-Dist: isort ; extra == 'tests'
+Requires-Dist: AutoROM ; extra == 'tests'
+Requires-Dist: bandit ; extra == 'tests'
+Requires-Dist: pytest-cov ; extra == 'tests'
+Requires-Dist: pre-commit ; extra == 'tests'
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Farama-Foundation/PettingZoo/master/pettingzoo-text.png" width="500px"/>
+</p>
+
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
+
+The documentation website is at [pettingzoo.farama.org](https://pettingzoo.farama.org) and we have a public discord server (which we also use to coordinate development work) that you can join here: https://discord.gg/nhvKkYa6qX
+
+## Environments
+
+PettingZoo includes the following families of environments:
+
+* [Atari](https://pettingzoo.farama.org/environments/atari/): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
+* [Butterfly](https://pettingzoo.farama.org/environments/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
+* [Classic](https://pettingzoo.farama.org/environments/classic): Classical games including card games, board games, etc.
+* [MPE](https://pettingzoo.farama.org/environments/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
+* [SISL](https://pettingzoo.farama.org/environments/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
+
