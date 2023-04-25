@@ -6,6 +6,11 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
+//Testare alta logica in afara de AI: da disable la toate environmenturile in afara de 17 si bifeaza la 
+// agent la behaviour parameters la behaviour type "heuristic"
+//daca vrei sa inveti nu uita sa dai revert
+
+//!!!SA AIBA TOATE ENVIRONMENTURILE ACEIASI PARAMETRII CA IN PREFAB CAND DAI LEARN (sa ti minte la care ai schimbat din hierarchy)
 // 1) deschide powershell in folderul proiectului
 // 2) ruleaza .\venv\Scripts\activate
 // 3) mlagents-learn .\Assets\config\moveConfig.yaml --initialize-from=Parameters_Move3 --run-id=Parameters_Move*X*
@@ -13,6 +18,17 @@ using UnityEngine;
 
 public class MoveAgent : Agent
 {
+    [SerializeField, Tooltip("If this is checked the player will start in a random valid position")]
+    private bool _randomizeStart = true;
+    [SerializeField, Tooltip("If this is checked the goal will start in a random valid position")]
+    private bool _randomizeGoal = true;
+    [SerializeField, Tooltip("If this is checked the labyrinth will not spawn")]
+    private bool _disableLabyrinth = false;
+    [SerializeField, Range(1.0f, 50.0f), Tooltip("The speed of the player")]
+    private float _moveSpeed = 1.0f;
+    [SerializeField, Range(0.5f, 10f), Tooltip("The minimum distance between the player and the goal")]
+    private float _minSpawnDistance = 5.0f;
+
     [SerializeField] 
     private Transform _targetTransform;
     [SerializeField]
@@ -23,88 +39,126 @@ public class MoveAgent : Agent
     private MeshRenderer _floorMeshRenderer;
 
 
-    [SerializeField]
-    private float _moveSpeed = 1.0f;
+    
     private readonly string _goalTag = "Goal";
     private readonly string _wallTag = "Wall";
+    private readonly string _labyrinthWallTag = "Labyrinth_Wall";
     private readonly float _reward = 13.420f;
+    private readonly float _targetBoundsExtra = 0.5f;
     private float _oldTime = 0.0f;
     private float _time = 0.0f;
-    private IEnumerable<Collider> _wallsCollider;
-    private float dist;
+    private IEnumerable<Collider> _wallsCollider = Enumerable.Empty<Collider>();
+    private float _dist;
     private float _optimalTime = 0.0f;
     private float _oldOptimalTime;
     private float _rewardCoeficient = 2.0f;
     private float _penalizeCoeficient = 1.0f;
 
+    private Vector3 _initPlayerPosition;
+    private Vector3 _initGoalPosition;
+    private bool _spawned = false;
+
     private void Start()
     {
-        if (_wallsCollider == null)
-            _wallsCollider = GameObject.FindGameObjectsWithTag(_wallTag)
-                .Select(go => go.GetComponent<Collider>());
+        _initPlayerPosition = transform.position;
+        _initGoalPosition = _targetTransform.position;
+
+        if (!_disableLabyrinth)
+        {
+            _wallsCollider = GameObject.FindGameObjectsWithTag(_labyrinthWallTag)
+               .Select(go => go.GetComponent<Collider>());
+        }
+        else
+        {
+            GameObject.FindGameObjectsWithTag(_labyrinthWallTag).ToList().ForEach(x => Destroy(x));
+        }
+            
     }
 
     public override void OnEpisodeBegin()
     {
-        transform.localPosition = new Vector3(Random.Range(-26f, 10f), 22f, Random.Range(-3f, 16f));
-        _targetTransform.localPosition = new Vector3(Random.Range(-26f, 10f), 22f, Random.Range(-3f, 16f));
+        _spawned = false;
 
-        bool playerCollided;
-        var playerCollider = GetComponent<Collider>();
-        bool targetCollided;
-        var targetCollider = _targetTransform.GetComponent<Collider>();
+        if (_randomizeStart)
+        {
+            Spawn(transform);
+        }
+        else
+        {
+            transform.position = _initPlayerPosition;
+        }
+
+        if (_randomizeGoal)
+        {
+            Spawn(_targetTransform);
+        }
+        else
+        {
+            _targetTransform.position = _initGoalPosition;
+        }
+
+        _spawned = true;
+
+        _dist = Vector3.Distance(transform.position, _targetTransform.position);
+
+        _oldTime = _time;
+        _time = 0.0f;
+      
+        _oldOptimalTime = _optimalTime;
+        _optimalTime = _dist / _moveSpeed;
+        if (_oldOptimalTime == 0)
+        {
+            _oldOptimalTime = _optimalTime;
+        }
+    }
+
+    private void Spawn(Transform transform)
+    {
+        bool collided;
+        var collider = transform.GetComponent<Collider>();
+
+        transform.localPosition = new Vector3(Random.Range(-26f, 10f), 22f, Random.Range(-3f, 16f));
+        Physics.SyncTransforms();
 
         do
         {
-            playerCollided = CheckCollisions(playerCollider);
+            collided = CheckCollisions(collider);
 
-            if (playerCollided)
+            if (collided)
             {
                 transform.localPosition = new Vector3(Random.Range(-26f, 10f), 22f, Random.Range(-3f, 16f));
                 Physics.SyncTransforms();
                 //Debug.Log("Player collided");
             }
 
-        } while (playerCollided);
+        } while (collided);
 
-        do
-        {
-            targetCollided = CheckCollisions(targetCollider);
-
-            if (targetCollided)
-            {
-                _targetTransform.localPosition = new Vector3(Random.Range(-26f, 10f), 22f, Random.Range(-3f, 16f));
-                Physics.SyncTransforms();        
-                //Debug.Log("Goal collided");
-            }
-
-        } while (targetCollided);
-
-        dist = Vector3.Distance(transform.position, _targetTransform.position);
-
-        _oldTime = _time;
-        _time = 0.0f;
-      
-        _oldOptimalTime = _optimalTime;
-        _optimalTime = dist / _moveSpeed;
-        if (_oldOptimalTime == 0)
-        {
-            _oldOptimalTime = _optimalTime;
-        }
-        //transform.localPosition = new Vector3(-15f, 22f, 0f);
     }
 
     private bool CheckCollisions(Collider targetCollider)
     {
+        var targetBounds = targetCollider.bounds;
+        targetBounds.Expand(_targetBoundsExtra);
+
         foreach (var wallCollider in _wallsCollider)
         {
-            if (targetCollider.bounds.Intersects(wallCollider.bounds))
+            if (targetBounds.Intersects(wallCollider.bounds))
             {
                 return true;
             }
         }
 
+        targetBounds = _targetTransform.GetComponent<Collider>().bounds;
+        targetBounds.Expand(0.25f);
+
         if (_targetTransform.GetComponent<Collider>().bounds.Intersects(GetComponent<Collider>().bounds))
+        {
+            return true;
+        }
+
+        var dist = Vector3.Distance(transform.position, _targetTransform.position);
+
+        if (dist < _minSpawnDistance)
         {
             return true;
         }
@@ -134,48 +188,57 @@ public class MoveAgent : Agent
         continuousActions[1] = Input.GetAxisRaw("Vertical");
     }
 
+    //Aici e partea importanta, trebuie umblat la rewarduri
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(_goalTag))
+        if (_spawned)
         {
-            Debug.Log("Euclidean distance: " + dist);
-            Debug.Log("Time: " + _time);
-            Debug.Log("Optimal time: " + _optimalTime);
-            
-            //ALTE REWARDURI
-            /*if (_time < _oldTime)
+            if (other.CompareTag(_goalTag))
             {
-                SetReward(_reward * 4);
-            }
-            else
-            {
-                SetReward(_reward * 2);
-            }*/
-            //SetReward(_reward * 2);
+                Debug.Log("Win");
+                Debug.Log("Euclidean distance: " + _dist);
+                Debug.Log("Time: " + _time);
+                Debug.Log("Optimal time: " + _optimalTime);
 
-            if (_time - _optimalTime < _oldTime - _oldOptimalTime)
-            {
-                SetReward(_reward / Mathf.Max(_time - _optimalTime, 1f) * _rewardCoeficient);
-                _rewardCoeficient += 0.5f; 
+                //ALTE REWARDURI
+                //1)
+                /*if (_time < _oldTime)
+                {
+                    SetReward(_reward * 4);
+                }
+                else
+                {
+                    SetReward(_reward * 2);
+                }*/
+                //2)
+                //SetReward(_reward * 2);
+
+                if (_time - _optimalTime < _oldTime - _oldOptimalTime)
+                {
+                    SetReward(_reward / Mathf.Max(_time - _optimalTime, 1f) * _rewardCoeficient);
+                    _rewardCoeficient += 0.5f;
+                }
+                else
+                {
+                    //Versiune cu +
+                    //SetReward(_reward / Mathf.Max(_time - _optimalTime, 1f) * _rewardCoeficient / 2);
+                    SetReward(-_reward * Mathf.Max(_time - _optimalTime, 1f) * _penalizeCoeficient);
+                }
+
+                _floorMeshRenderer.material = _winMaterial;
+                EndEpisode();
             }
-            else
+            if (other.CompareTag(_wallTag) || other.CompareTag(_labyrinthWallTag))
             {
-                //Versiune cu +
-                //SetReward(_reward / Mathf.Max(_time - _optimalTime, 1f) * _rewardCoeficient / 2);
+                Debug.Log("Loose");
                 SetReward(-_reward * Mathf.Max(_time - _optimalTime, 1f) * _penalizeCoeficient);
+                //SetReward(-_reward);
+                _penalizeCoeficient += 0.5f;
+
+                _floorMeshRenderer.material = _looseMaterial;
+                EndEpisode();
             }
-
-            _floorMeshRenderer.material = _winMaterial;
-            EndEpisode();
         }
-        if (other.CompareTag(_wallTag))
-        {
-            SetReward(-_reward * Mathf.Max(_time - _optimalTime, 1f) * _penalizeCoeficient);
-            //SetReward(-_reward);
-            _penalizeCoeficient += 0.5f;
-
-            _floorMeshRenderer.material = _looseMaterial;
-            EndEpisode();
-        }
+       
     }
 }
