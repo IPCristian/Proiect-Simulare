@@ -5,6 +5,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 //Testare alta logica in afara de AI: da disable la toate environmenturile in afara de 17 si bifeaza la 
 // agent la behaviour parameters la behaviour type "heuristic"
@@ -33,6 +34,7 @@ public class MoveAgent : Agent
     private Transform _targetTransform;
     [SerializeField]
     private Material _winMaterial;
+    private GameObject _postProcessing;
     [SerializeField]
     private Material _looseMaterial;
     [SerializeField]
@@ -60,6 +62,7 @@ public class MoveAgent : Agent
 
     private void Start()
     {
+        _postProcessing = GameObject.Find("GlobalPostProcessing");
         _initPlayerPosition = transform.position;
         _initGoalPosition = _targetTransform.position;
 
@@ -226,6 +229,9 @@ public class MoveAgent : Agent
                 }
 
                 _floorMeshRenderer.material = _winMaterial;
+                CancelInvoke("removePostFx");
+                _postProcessing.GetComponent<Volume>().enabled = true;
+                Invoke("removePostFx", 3);
                 EndEpisode();
             }
             if (other.CompareTag(_wallTag) || other.CompareTag(_labyrinthWallTag))
@@ -240,5 +246,10 @@ public class MoveAgent : Agent
             }
         }
        
+    }
+
+    void removePostFx()
+    {
+        _postProcessing.GetComponent<Volume>().enabled= false;
     }
 }

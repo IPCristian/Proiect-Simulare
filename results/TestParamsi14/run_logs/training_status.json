@@ -1,0 +1,56 @@
+{
+    "Move": {
+        "checkpoints": [
+            {
+                "steps": 499982,
+                "file_path": "results\\TestParamsi14\\Move\\Move-499982.onnx",
+                "reward": -1846.217529296875,
+                "creation_time": 1684597601.3877897,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi14\\Move\\Move-499982.pt"
+                ]
+            },
+            {
+                "steps": 999972,
+                "file_path": "results\\TestParamsi14\\Move\\Move-999972.onnx",
+                "reward": null,
+                "creation_time": 1684599540.5794842,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi14\\Move\\Move-999972.pt"
+                ]
+            },
+            {
+                "steps": 1499996,
+                "file_path": "results\\TestParamsi14\\Move\\Move-1499996.onnx",
+                "reward": null,
+                "creation_time": 1684601515.3144946,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi14\\Move\\Move-1499996.pt"
+                ]
+            },
+            {
+                "steps": 1500060,
+                "file_path": "results\\TestParamsi14\\Move\\Move-1500060.onnx",
+                "reward": null,
+                "creation_time": 1684601515.3783877,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi14\\Move\\Move-1500060.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1500060,
+            "file_path": "results\\TestParamsi14\\Move.onnx",
+            "reward": null,
+            "creation_time": 1684601515.3783877,
+            "auxillary_file_paths": [
+                "results\\TestParamsi14\\Move\\Move-1500060.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
