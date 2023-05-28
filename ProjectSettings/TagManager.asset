@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Labyrinth_Wall
+  - Wall
+  - Goal
+  - PostProcessing
+  - Agent
   layers:
   - Default
   - TransparentFX

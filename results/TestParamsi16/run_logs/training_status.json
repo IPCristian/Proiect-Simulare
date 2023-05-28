@@ -1,0 +1,65 @@
+{
+    "Move": {
+        "checkpoints": [
+            {
+                "steps": 349941,
+                "file_path": "results\\TestParamsi16\\Move\\Move-349941.onnx",
+                "reward": null,
+                "creation_time": 1684777710.1540277,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi16\\Move\\Move-349941.pt"
+                ]
+            },
+            {
+                "steps": 399990,
+                "file_path": "results\\TestParamsi16\\Move\\Move-399990.onnx",
+                "reward": null,
+                "creation_time": 1684778310.8916516,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi16\\Move\\Move-399990.pt"
+                ]
+            },
+            {
+                "steps": 449960,
+                "file_path": "results\\TestParamsi16\\Move\\Move-449960.onnx",
+                "reward": null,
+                "creation_time": 1684778913.0197816,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi16\\Move\\Move-449960.pt"
+                ]
+            },
+            {
+                "steps": 499970,
+                "file_path": "results\\TestParamsi16\\Move\\Move-499970.onnx",
+                "reward": 0.0,
+                "creation_time": 1684779513.7596498,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi16\\Move\\Move-499970.pt"
+                ]
+            },
+            {
+                "steps": 500034,
+                "file_path": "results\\TestParamsi16\\Move\\Move-500034.onnx",
+                "reward": 0.0,
+                "creation_time": 1684779513.8304439,
+                "auxillary_file_paths": [
+                    "results\\TestParamsi16\\Move\\Move-500034.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500034,
+            "file_path": "results\\TestParamsi16\\Move.onnx",
+            "reward": 0.0,
+            "creation_time": 1684779513.8304439,
+            "auxillary_file_paths": [
+                "results\\TestParamsi16\\Move\\Move-500034.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
